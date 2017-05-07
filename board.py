@@ -8,7 +8,7 @@ class Board:
 	#state constants
 	DEATH = -100
 	NORMAL = -1
-	SNACK = 10
+	SNACK = 20
 	
 	#background
 	color = (50, 30, 10)
