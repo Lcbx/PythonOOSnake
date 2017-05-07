@@ -6,7 +6,7 @@ class Snake:
 	headColor = (10, 255, 10)
 	bodyColor = (0, 100, 30)
 		
-	def __init__(self, x = 10, y = 10, length = 3):
+	def __init__(self, x = 5, y = 3, length = 3):
 		self.direction = direction.right()
 		self.body = []
 		self.growLength = 0

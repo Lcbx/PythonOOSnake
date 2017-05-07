@@ -16,8 +16,8 @@ class Board:
 	def __init__(self):
 		
 		#dimensions
-		self.width = 20 # size of field width in blocks
-		self.height = 20
+		self.width = 6 # size of field width in blocks
+		self.height = 6
 		
 		#actors
 		self.snake = snake.Snake()
