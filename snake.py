@@ -5,7 +5,6 @@ class Snake:
 
 	headColor = (10, 255, 10)
 	bodyColor = (0, 100, 30)
-	deadColor = (200, 10, 255)
 		
 	def __init__(self, x = 10, y = 10, length = 3):
 		self.direction = direction.right()
