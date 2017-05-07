@@ -11,7 +11,7 @@ class Game:
 		self.board = board.Board()
 		
 		#graphic size of cells
-		self.blockSize = 30
+		self.blockSize = 60
 		
 		# Initialize pygame
 		pygame.init()
@@ -21,7 +21,7 @@ class Game:
 		self.screen = pygame.display.set_mode(self.screenSize)
 		
 		#timeticks
-		self.timeStep = 70 # milliseconds per step
+		self.timeStep = 200 # milliseconds per step
 		pygame.time.set_timer(pygame.USEREVENT, self.timeStep)
 	
 	
@@ -69,7 +69,7 @@ class Game:
 			
 			# turn ended, update
 			if event.type == pygame.USEREVENT:
-				result = self.board.update() != self.board.DEATH
+				result = self.board.endTurn() != self.board.DEATH
 			self.updateScreen()
 			
 		# Game over!

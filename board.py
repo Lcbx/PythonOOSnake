@@ -16,7 +16,7 @@ class Board:
 	def __init__(self):
 		
 		#dimensions
-		self.width = 6 # size of field width in blocks
+		self.width = 10
 		self.height = 6
 		
 		#actors
@@ -27,7 +27,7 @@ class Board:
 		self.snake.direction = decision
 	
 	#state manipulation
-	def update(self):
+	def endTurn(self):	
 		# does the snake collide with itself?
 		snakeCollidesSnake = not self.snake.move()
 		x, y = self.snake.getHead()
@@ -46,6 +46,10 @@ class Board:
 		# nah just usual snaky stuff
 		return self.NORMAL
 	
+	def endTurnDecision(self, decision):
+		self.command(decision)
+		return self.endTurn()
+	
 	def clone(self):
 		return copy.deepcopy(self)
 	
@@ -53,7 +57,7 @@ class Board:
 	def nextState(self, decision):
 		clone = self.clone()
 		clone.command(decision)
-		result = clone.update()
+		result = clone.endTurn()
 		return result, clone
 	
 	def decisionResult(self, decision):
