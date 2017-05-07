@@ -23,8 +23,8 @@ class Board:
 		self.snake = snake.Snake()
 		self.food = food.Food(self.width, self.height)
 	
-	def command(self, input):
-		self.snake.direction = input
+	def command(self, decision):
+		self.snake.direction = decision
 	
 	#state manipulation
 	def update(self):
@@ -50,11 +50,17 @@ class Board:
 		return copy.deepcopy(self)
 	
 	#important for the AI
-	def nextState(self, input):
+	def nextState(self, decision):
 		clone = self.clone()
-		clone.command(input)
-		clone.update()
-		return clone
+		clone.command(decision)
+		result = clone.update()
+		return result, clone
+	
+	def decisionResult(self, decision):
+		result, clone = self.nextState(decision)
+		return result
+	
+	
 	
 	
 	

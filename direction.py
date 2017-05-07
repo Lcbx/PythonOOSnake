@@ -37,3 +37,5 @@ class down(constVec):
 		return 0;
 	def y(self):
 		return 1;
+
+ALL = [ right(), left(), up(), down() ]

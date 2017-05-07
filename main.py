@@ -21,7 +21,7 @@ class Game:
 		self.screen = pygame.display.set_mode(self.screenSize)
 		
 		#timeticks
-		self.timeStep = 200 # milliseconds per step
+		self.timeStep = 70 # milliseconds per step
 		pygame.time.set_timer(pygame.USEREVENT, self.timeStep)
 	
 	

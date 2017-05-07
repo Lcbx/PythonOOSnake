@@ -4,18 +4,18 @@ import direction
 
 def play(event, board):
 	# default used if timer expired
-	result = board.snake.direction
+	decision = board.snake.direction
 	# key pressed
 	if event.type == pygame.KEYDOWN: 
 		if event.key == pygame.K_LEFT:
-			result = direction.left()
+			decision = direction.left()
 		elif event.key == pygame.K_RIGHT:
-			result = direction.right()
+			decision = direction.right()
 		elif event.key == pygame.K_DOWN:
-			result = direction.down()
+			decision = direction.down()
 		elif event.key == pygame.K_UP:
-			result = direction.up()
-	return result
+			decision = direction.up()
+	return decision
 
 main.play = play
 application = main.Game()
