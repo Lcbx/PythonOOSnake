@@ -13,15 +13,12 @@ class Node:
 	def __init__(self, parent, decision, weight):
 		self.parent = parent
 		self.decision = decision
-		if parent != None:
-			self.weight = parent.weight + weight
-		else:
-			self.weight = weight;
+		self.weight = weight
 	
 	def expand(self, depth, board):
 		for decision in direction.ALL:
 			result, clone = board.nextState(decision)
-			child = Node(self, decision, result)
+			child = Node(self, decision, self.weight + result)
 			if(depth != 0): child.expand(depth-1, clone)
 			else: self.paths.append(child)
 	
