@@ -1,4 +1,4 @@
-import main
+import gameloop
 import pygame
 import direction
 
@@ -17,6 +17,6 @@ def play(event, board):
 			decision = direction.up()
 	return decision
 
-main.play = play
-application = main.Game()
+gameloop.play = play
+application = gameloop.Game()
 application.run()

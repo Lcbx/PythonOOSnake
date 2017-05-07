@@ -1,8 +1,7 @@
-import main
+import gameloop
 import random
 import direction
 
-import debug
 
 def play(event, board):
 	# avoid infinite loop
@@ -16,8 +15,6 @@ def play(event, board):
 		# check if there is no issue
 		elif result == board.DEATH: deathPaths += 1
 	
-	debug.say(deathPaths)
-	
 	# die a brave death if no escape
 	if deathPaths == len(direction.ALL): return random.choice(direction.ALL)
 	
@@ -26,6 +23,6 @@ def play(event, board):
 		decision = random.choice(direction.ALL)
 		if board.decisionResult(decision) != board.DEATH: return decision
 
-main.play = play
-application = main.Game()
+gameloop.play = play
+application = gameloop.Game()
 application.run()
