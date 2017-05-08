@@ -16,7 +16,7 @@ class Board:
 	def __init__(self):
 		
 		#dimensions
-		self.width = 10
+		self.width = 20
 		self.height = 6
 		
 		#actors
@@ -54,14 +54,14 @@ class Board:
 		return copy.deepcopy(self)
 	
 	#important for the AI
-	def nextState(self, decision):
+	def potentialEndturn(self, decision):
 		clone = self.clone()
 		clone.command(decision)
 		result = clone.endTurn()
 		return result, clone
 	
-	def decisionResult(self, decision):
-		result, clone = self.nextState(decision)
+	def potentialEndturnResult(self, decision):
+		result, clone = self.potentialEndturn(decision)
 		return result
 	
 	

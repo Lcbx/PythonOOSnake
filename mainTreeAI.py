@@ -5,24 +5,30 @@ import direction
 import debug
 
 from inliner import inline
+import time
 
 # depth of investigation
 DEPTH = 40
+
 # threshold at which we expand only down a single random path
-THRESHOLD = DEPTH-3
+THRESHOLD = DEPTH-2
 
 # dictionnary that associate a direction with a score
 paths = {}
 
+# signal to stop computation
+done = False
+
 @inline
 def commit(decision, weight, depth):
-	if paths[decision] < weight :
+	if paths[decision] and paths[decision] < weight :
 		paths[decision] = weight
 	#debug.say ("commiting a decision of value " + str(weight) + " and depth " + str(depth))
 
 @inline
 def _expand(decision, probe, depth, weight, board):
-	addedWeight, newBoard = board.nextState(probe)
+	if(done): return
+	addedWeight, newBoard = board.potentialEndturn(probe)
 	newWeight = weight + addedWeight
 	expand(decision, depth-1, newWeight, newBoard)
 		
@@ -38,31 +44,55 @@ def expand(decision, depth, weight, board):
 		#probe = random.choice(direction.ALL)
 		probe = decision
 		_expand(decision, probe, depth, weight, board)
-	
-def findBestMove(board):
+		
+		
+		
+		
+def startTurn(board):
 	paths.clear()
-	#debug.say(paths.values())
+	
+	global done
+	done = False
+	
+	#debug.say(paths)
+	
 	for decision in direction.ALL:
 		paths[decision] = board.DEATH
-		weight, newBoard = board.nextState(decision)
+		weight, newBoard = board.potentialEndturn(decision)
 		expand(decision, DEPTH-1, weight, newBoard)
+
+def handleKey(event):
+	pass
 	
-	#sorted(paths.items(), key=paths.get)
+def play():
+	
+	global done
+	done = True
+	
+	time.sleep(0.001)
+	
+	decision = None
+	
+	# sort moves by worth
 	priorityList = sorted(paths, key=paths.get)
 	
-	decision = priorityList[-1]
+	#get the best
+	if priorityList: decision = priorityList[-1]
 	
 	#debug.say(paths.values())
+	#debug.say(priorityList)
+	#debug.say(paths)
 	#debug.say("best move " + str(paths[decision])+ " " + str(decision))
-	
-	#decision2 = priorityList[-2]
-	#if(paths[decision] == paths[decision2]): decision = decision2
 	
 	return decision
 
-def play(event, board):
-	return findBestMove(board)
-
+gameloop.startTurn = startTurn
+gameloop.handleKey = handleKey
 gameloop.play = play
 application = gameloop.Game()
 application.run()
+	
+	
+	
+	
+	

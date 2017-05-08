@@ -2,7 +2,18 @@
 import pygame
 import direction
 import board
+from threading import Thread, Timer
 
+		
+class ComputeThread(Thread):
+	def __init__(self, board):
+		Thread.__init__(self)
+		self.board = board
+	
+	def run(self):
+		startTurn(self.board)
+		
+		
 
 class Game:
 
@@ -21,9 +32,56 @@ class Game:
 		self.screen = pygame.display.set_mode(self.screenSize)
 		
 		#timeticks
-		self.timeStep = 200 # milliseconds per step
+		self.timeStep = 100 # milliseconds per step
 		pygame.time.set_timer(pygame.USEREVENT, self.timeStep)
 	
+	
+	def run(self):
+		
+		loop = True
+		while loop:
+			
+			# thread to let the AIs begin computations
+			thread = ComputeThread(self.board)
+			thread.start()
+			
+			# get events : clos window, key press or timer expired
+			event = pygame.event.wait()
+			
+			# close window
+			if event.type == pygame.QUIT: 
+				pygame.quit()
+				return 
+			
+			# handle key press
+			elif event.type == pygame.KEYDOWN:
+				handleKey(event)
+			
+			# timer expired
+			elif event.type == pygame.USEREVENT:
+				# get decision of player (human or AI)
+				decision = play()
+				# act on it
+				if decision!=None : self.board.command(decision)
+				# update the board
+				loop = self.board.endTurn() != self.board.DEATH
+			
+			# draw calls
+			self.updateScreen()
+			
+		# Game over!
+		for i in range(0, 10):
+			self.updateScreen()
+			pygame.time.wait(100)
+	
+	
+	
+	
+	def updateScreen(self):
+		self.screen.fill(self.board.color)
+		self.drawSnake()
+		self.drawFood();
+		pygame.display.update()
 	
 	
 	def drawRect(self, color, x, y):
@@ -44,39 +102,8 @@ class Game:
 			(x, y) = self.board.snake.body[i]
 			self.drawRect(color, x, y)
 	
-	def updateScreen(self):
-		self.screen.fill(self.board.color)
-		self.drawSnake()
-		self.drawFood();
-		pygame.display.update()
-	
-	
-	
-	def run(self):
-		result = True
-		while result:
-			event = pygame.event.wait()
-			
-			# close window
-			if event.type == pygame.QUIT: 
-				pygame.quit()
-				return #sys.quit(0)
-			
-			# get decision of player (human or AI)
-			decision = play(event, self.board)
-			# act on it
-			self.board.command(decision)
-			
-			# turn ended, update
-			if event.type == pygame.USEREVENT:
-				result = self.board.endTurn() != self.board.DEATH
-			self.updateScreen()
-			
-		# Game over!
-		for i in range(0, 10):
-			self.updateScreen()
-			pygame.time.wait(100)
-	
+
+		
 	
 	
 	
