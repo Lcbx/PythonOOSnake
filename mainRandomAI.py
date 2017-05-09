@@ -4,38 +4,40 @@ import direction
 
 import debug
 
-decision = None
 
-def startTurn(board):
+class RandomPlayer:
 	
-	global decision
+	def __init__(self, board, timeStep):
+		self.board = board
+		self.decision = None
+		self.paths = []
 	
-	# available paths
-	paths = []
-	
-	# if a snack is close gobble it
-	for i in range(0, len(direction.ALL)):
-		decision = direction.ALL[i]
-		result = board.potentialEndturnResult(decision)
-		if result == board.SNACK:
-			return
-		# check if there is no issue
-		elif result == board.DEATH:
-			pass
-		# added to possible paths 
-		else: paths.append(decision)
+	def think(self):
+		# if a snack is close gobble it
+		for possibility in direction.ALL:
+			result = self.board.potentialEndturnResult(possibility)
+			if result == self.board.SNACK:
+				self.decision = possibility
+				return
+			# check if there is no issue
+			elif result == self.board.DEATH:
+				pass
+			# added to possible paths 
+			else: self.paths.append(possibility)
 		
-	# random choice in remaining options 
-	if paths : decision = random.choice(paths)
+		# random choice in remaining options 
+		if self.paths : self.decision = random.choice(self.paths)
 
-def handleKey(event):
-	pass
+	def handleKey(self, event):
+		pass
+		
+	def getDecision(self):
+		return self.decision
+
+def getPlayer(board, timeStep):
+	return RandomPlayer(board, timeStep)
 	
-def play():
-	return decision
-
-gameloop.startTurn = startTurn
-gameloop.handleKey = handleKey
-gameloop.play = play
+	
+gameloop.getPlayer = getPlayer
 application = gameloop.Game()
 application.run()

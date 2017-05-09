@@ -2,17 +2,27 @@
 import pygame
 import direction
 import board
-from threading import Thread, Timer
+from threading import Thread
+
+
+import debug
 
 		
-class ComputeThread(Thread):
-	def __init__(self, board):
+class PlayerThread(Thread):
+	def __init__(self, board, timeStep):
 		Thread.__init__(self)
 		self.board = board
+		self.timeStep = timeStep
+		self.player = getPlayer(self.board, self.timeStep)
 	
 	def run(self):
-		startTurn(self.board)
+		self.player.think()
 		
+	def handleKey(self, event):
+		self.player.handleKey(event)
+	
+	def getDecision(self):
+		return self.player.getDecision()
 		
 
 class Game:
@@ -41,38 +51,43 @@ class Game:
 		loop = True
 		while loop:
 			
-			# thread to let the AIs begin computations
-			thread = ComputeThread(self.board)
-			thread.start()
-			
-			# get events : clos window, key press or timer expired
-			event = pygame.event.wait()
-			
-			# close window
-			if event.type == pygame.QUIT: 
-				pygame.quit()
-				return 
-			
-			# handle key press
-			elif event.type == pygame.KEYDOWN:
-				handleKey(event)
-			
-			# timer expired
-			elif event.type == pygame.USEREVENT:
-				# get decision of player (human or AI)
-				decision = play()
-				# act on it
-				if decision!=None : self.board.command(decision)
-				# update the board
-				loop = self.board.endTurn() != self.board.DEATH
-			
 			# draw calls
 			self.updateScreen()
 			
+			# thread to let the AIs begin computations
+			thread = PlayerThread(self.board, self.timeStep)
+			thread.start()
+			
+			# loop for interrupts
+			while loop :
+				
+				# get events : clos window, key press or timer expired
+				event = pygame.event.wait()
+				
+				# close window
+				if event.type == pygame.QUIT: 
+					pygame.quit()
+					return 
+				
+				# handle key press
+				elif event.type == pygame.KEYDOWN:
+					thread.handleKey(event)
+				
+				# timer expired
+				elif event.type == pygame.USEREVENT:
+					# get decision of player (human or AI)
+					decision = thread.getDecision()
+					# act on it
+					if decision!=None : self.board.command(decision)
+					# update the board
+					loop = self.board.endTurn() != self.board.DEATH
+					break
+		
+		
+		
 		# Game over!
-		for i in range(0, 10):
-			self.updateScreen()
-			pygame.time.wait(100)
+		self.updateScreen()
+		pygame.time.wait(1000)
 	
 	
 	
