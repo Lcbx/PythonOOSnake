@@ -2,14 +2,14 @@ import direction
 
 
 class Snake:
-
-	headColor = (10, 255, 10)
-	bodyColor = (0, 100, 30)
+	
+	headColor = (0,250,0)
+	colors = [(100,150,20), (20,150,150), (70,100,120), ]
 		
 	def __init__(self, x = 5, y = 3, length = 3):
 		self.direction = direction.right()
 		self.body = []
-		self.growLength = 0
+		self.growLength = 15
 		for i in range(0, length):
 			self.body.append((x - i, y))
 	

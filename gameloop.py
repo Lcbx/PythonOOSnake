@@ -9,11 +9,9 @@ import debug
 
 		
 class PlayerThread(Thread):
-	def __init__(self, board, timeStep):
+	def __init__(self, player):
 		Thread.__init__(self)
-		self.board = board
-		self.timeStep = timeStep
-		self.player = getPlayer(self.board, self.timeStep)
+		self.player = player
 	
 	def run(self):
 		self.player.think()
@@ -42,11 +40,14 @@ class Game:
 		self.screen = pygame.display.set_mode(self.screenSize)
 		
 		#timeticks
-		self.timeStep = 100 # milliseconds per step
+		self.timeStep = 300 # milliseconds per step
 		pygame.time.set_timer(pygame.USEREVENT, self.timeStep)
 	
 	
 	def run(self):
+		
+		# the player
+		player = getPlayer(self.board, self.timeStep)
 		
 		loop = True
 		while loop:
@@ -55,7 +56,8 @@ class Game:
 			self.updateScreen()
 			
 			# thread to let the AIs begin computations
-			thread = PlayerThread(self.board, self.timeStep)
+			if player.board : player.board = self.board #to update their version of the board, a bit unnecessary
+			thread = PlayerThread(player)
 			thread.start()
 			
 			# loop for interrupts
@@ -87,7 +89,7 @@ class Game:
 		
 		# Game over!
 		self.updateScreen()
-		pygame.time.wait(1000)
+		pygame.time.wait(1500)
 	
 	
 	
@@ -106,14 +108,17 @@ class Game:
 	
 	def drawFood(self):
 		(x, y) = self.board.food.position
-		self.drawRect(self.board.food.color, x, y  )
+		self.drawRect(self.board.food.color, x, y )
 	
 	def drawSnake(self):
-		for i in range(0, len(self.board.snake.body)):
-			if i == 0:
-				color = self.board.snake.headColor
+		color = ()
+		length = len(self.board.snake.body)
+		for i in range(0, length):
+			if( i == 0 ): color = self.board.snake.headColor
 			else:
-				color = self.board.snake.bodyColor
+				r, g, b = self.board.snake.colors[int((i-1)/3)%3]
+				factor = float( length - i + 10) / (length + 7)
+				color = int(r * factor), int(g * factor), int(b * factor)
 			(x, y) = self.board.snake.body[i]
 			self.drawRect(color, x, y)
 	

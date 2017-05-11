@@ -13,6 +13,8 @@ class RandomPlayer:
 		self.paths = []
 	
 	def think(self):
+		self.decision = None
+		self.paths = []
 		# if a snack is close gobble it
 		for possibility in direction.ALL:
 			result = self.board.potentialEndturnResult(possibility)
