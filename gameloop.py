@@ -116,9 +116,10 @@ class Game:
 		for i in range(0, length):
 			if( i == 0 ): color = self.board.snake.headColor
 			else:
-				r, g, b = self.board.snake.colors[int((i-1)/3)%3]
-				factor = float( length - i + 10) / (length + 7)
-				color = int(r * factor), int(g * factor), int(b * factor)
+				r1, g1, b1 = self.board.snake.colors[int((i-1)/2)%3]
+				r2, g2, b2 = self.board.snake.colors[int(i/2)%3]
+				factor = min(float( length - i) / length + 0.3, 1)
+				color = int((r1 + r2)/2 * factor), int((g1 + g2)/2 * factor), int((b1 + b2)/2 * factor)
 			(x, y) = self.board.snake.body[i]
 			self.drawRect(color, x, y)
 	

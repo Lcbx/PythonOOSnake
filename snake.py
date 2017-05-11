@@ -3,7 +3,7 @@ import direction
 
 class Snake:
 	
-	headColor = (0,250,0)
+	headColor = (200,0,0)
 	colors = [(100,150,20), (20,150,150), (70,100,120), ]
 		
 	def __init__(self, x = 5, y = 3, length = 3):
