@@ -7,11 +7,10 @@ import debug
 
 class HumanPlayer:
 	
-	def __init__(self, board, timeStep):
-		self.board = board
+	def __init__(self, timeStep):
 		self.decision = None
 	
-	def think(self):
+	def think(self, board):
 		pass
 	
 	def handleKey(self, event):
@@ -27,8 +26,8 @@ class HumanPlayer:
 	def getDecision(self):
 		return self.decision
 
-def getPlayer(board, timeStep):
-	return HumanPlayer(board, timeStep)
+def getPlayer(timeStep):
+	return HumanPlayer(timeStep)
 	
 	
 gameloop.getPlayer = getPlayer

@@ -3,8 +3,8 @@ import direction
 
 class Snake:
 	
-	headColor = (200,0,0)
-	colors = [(100,150,20), (20,150,150), (70,100,120), ]
+	headColor = (100,60,150)
+	color = (100,150,20)
 		
 	def __init__(self, x = 5, y = 3, length = 3):
 		self.direction = direction.right()
@@ -17,7 +17,7 @@ class Snake:
 		return self.body[0]
 	
 	def grow(self, length = 1):
-		self.growLength = length
+		self.growLength += length
 	
 	def move(self):
 		# get old position of head
@@ -32,8 +32,3 @@ class Snake:
 		# otherwise decrease grow count
 		else: 
 			self.growLength -= 1
-		
-		# does the new head collide with the rest of the body?
-		if (x, y) in self.body[1:]: 
-			return False # yes, then this is an invalid move
-		return True # no

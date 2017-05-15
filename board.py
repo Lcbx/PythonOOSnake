@@ -7,8 +7,8 @@ class Board:
 	
 	#state constants
 	DEATH = -100
-	NORMAL = -1
-	SNACK = 20
+	NORMAL = -10
+	SNACK = -1
 	
 	#background
 	color = (50, 30, 10)
@@ -20,6 +20,7 @@ class Board:
 		self.height = 6
 		
 		#actors
+		self.snakeIsdead = False
 		self.snake = snake.Snake()
 		self.food = food.Food(self.width, self.height)
 	
@@ -27,16 +28,22 @@ class Board:
 		self.snake.direction = decision
 	
 	#state manipulation
-	def endTurn(self):	
-		# does the snake collide with itself?
-		snakeCollidesSnake = not self.snake.move()
+	def endTurn(self):
+		# if the snake is dead, state is DEAD
+		if self.snakeIsdead : return self.DEATH
+		# move the snake
+		self.snake.move()
+		# position of snake's head
 		x, y = self.snake.getHead()
+		# does the snake collide with itself?
+		snakeCollidesSnake = (x, y) in self.snake.body[1:]
 		# does the snake collide with a wall?
 		snakeCollidesWall = x < 0 or x >= self.width or y < 0 or y >= self.height
 		# if so it's dead KAPUT
 		if snakeCollidesSnake or snakeCollidesWall:
+			self.snakeIsdead =True
 			return self.DEATH
-		#i t's a different story with food
+		# it's a different story with food
 		if (x, y) == self.food.position:
 			# the snake grows
 			self.snake.grow()

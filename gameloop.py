@@ -2,25 +2,11 @@
 import pygame
 import direction
 import board
-from threading import Thread
+#from threading import Thread
 
 
 import debug
 
-		
-class PlayerThread(Thread):
-	def __init__(self, player):
-		Thread.__init__(self)
-		self.player = player
-	
-	def run(self):
-		self.player.think()
-		
-	def handleKey(self, event):
-		self.player.handleKey(event)
-	
-	def getDecision(self):
-		return self.player.getDecision()
 		
 
 class Game:
@@ -40,14 +26,14 @@ class Game:
 		self.screen = pygame.display.set_mode(self.screenSize)
 		
 		#timeticks
-		self.timeStep = 300 # milliseconds per step
+		self.timeStep = 1000 # milliseconds per step
 		pygame.time.set_timer(pygame.USEREVENT, self.timeStep)
 	
 	
 	def run(self):
 		
 		# the player
-		player = getPlayer(self.board, self.timeStep)
+		player = getPlayer(self.timeStep)
 		
 		loop = True
 		while loop:
@@ -55,10 +41,13 @@ class Game:
 			# draw calls
 			self.updateScreen()
 			
+			
+			try: # to update their version of the board, a bit unnecessary
+				player.board = self.board 
+			except AttributeError: pass
+			
 			# thread to let the AIs begin computations
-			if player.board : player.board = self.board #to update their version of the board, a bit unnecessary
-			thread = PlayerThread(player)
-			thread.start()
+			player.think(self.board)
 			
 			# loop for interrupts
 			while loop :
@@ -73,12 +62,12 @@ class Game:
 				
 				# handle key press
 				elif event.type == pygame.KEYDOWN:
-					thread.handleKey(event)
+					player.handleKey(event)
 				
 				# timer expired
 				elif event.type == pygame.USEREVENT:
 					# get decision of player (human or AI)
-					decision = thread.getDecision()
+					decision = player.getDecision()
 					# act on it
 					if decision!=None : self.board.command(decision)
 					# update the board
@@ -116,10 +105,9 @@ class Game:
 		for i in range(0, length):
 			if( i == 0 ): color = self.board.snake.headColor
 			else:
-				r1, g1, b1 = self.board.snake.colors[int((i-1)/2)%3]
-				r2, g2, b2 = self.board.snake.colors[int(i/2)%3]
+				r, g, b = self.board.snake.color
 				factor = min(float( length - i) / length + 0.3, 1)
-				color = int((r1 + r2)/2 * factor), int((g1 + g2)/2 * factor), int((b1 + b2)/2 * factor)
+				color = int(r  * factor), int(g * factor), int(b * factor)
 			(x, y) = self.board.snake.body[i]
 			self.drawRect(color, x, y)
 	

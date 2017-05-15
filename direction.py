@@ -5,6 +5,8 @@
 
 
 class constVec:
+	def __str__(self):
+		return "Vec"
 	def x(self):
 		return 0;
 	def y(self):
@@ -18,21 +20,29 @@ class constVec:
 		return (X, Y)
 
 class right(constVec):
+	def __str__(self):
+		return "right"
 	def x(self):
 		return 1;
 	def y(self):
 		return 0;
 class left(constVec):
+	def __str__(self):
+		return "left"
 	def x(self):
 		return -1;
 	def y(self):
 		return 0;
 class up(constVec):
+	def __str__(self):
+		return "up"
 	def x(self):
 		return 0;
 	def y(self):
 		return -1;
 class down(constVec):
+	def __str__(self):
+		return "down"
 	def x(self):
 		return 0;
 	def y(self):

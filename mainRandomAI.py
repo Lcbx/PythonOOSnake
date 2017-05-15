@@ -7,22 +7,21 @@ import debug
 
 class RandomPlayer:
 	
-	def __init__(self, board, timeStep):
-		self.board = board
+	def __init__(self, timeStep):
 		self.decision = None
 		self.paths = []
 	
-	def think(self):
+	def think(self, board):
 		self.decision = None
 		self.paths = []
 		# if a snack is close gobble it
 		for possibility in direction.ALL:
-			result = self.board.potentialEndturnResult(possibility)
-			if result == self.board.SNACK:
+			result = board.potentialEndturnResult(possibility)
+			if result == board.SNACK:
 				self.decision = possibility
 				return
 			# check if there is no issue
-			elif result == self.board.DEATH:
+			elif result == board.DEATH:
 				pass
 			# added to possible paths 
 			else: self.paths.append(possibility)
@@ -36,8 +35,8 @@ class RandomPlayer:
 	def getDecision(self):
 		return self.decision
 
-def getPlayer(board, timeStep):
-	return RandomPlayer(board, timeStep)
+def getPlayer(timeStep):
+	return RandomPlayer(timeStep)
 	
 	
 gameloop.getPlayer = getPlayer
