@@ -6,11 +6,11 @@ import direction
 class ProtoPlayer:
 	
 	# constructor : receives the gamestate and turn time
-	def __init__(self, board, timeStep):
-		self.board = board
+	def __init__(self, timeStep):
+		self.timeStep = timeStep
 	
 	# the AI computations should go here
-	def think(self):
+	def think(self, board):
 		pass
 	
 	# to handle keyStrokes
@@ -19,10 +19,10 @@ class ProtoPlayer:
 	
 	# returns the player's decision
 	def getDecision(self):
-		return self.board.snake.direction
+		return None
 
-def getPlayer(board, timeStep):
-	return ProtoPlayer(board, timeStep)
+def getPlayer(timeStep):
+	return ProtoPlayer(timeStep)
 	
 	
 gameloop.getPlayer = getPlayer

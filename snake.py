@@ -9,7 +9,7 @@ class Snake:
 	def __init__(self, x = 5, y = 3, length = 3):
 		self.direction = direction.right()
 		self.body = []
-		self.growLength = 15
+		self.growLength = 0
 		for i in range(0, length):
 			self.body.append((x - i, y))
 	

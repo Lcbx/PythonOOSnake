@@ -26,7 +26,7 @@ class Game:
 		self.screen = pygame.display.set_mode(self.screenSize)
 		
 		#timeticks
-		self.timeStep = 1000 # milliseconds per step
+		self.timeStep = 250 # milliseconds per step
 		pygame.time.set_timer(pygame.USEREVENT, self.timeStep)
 	
 	
@@ -40,11 +40,6 @@ class Game:
 			
 			# draw calls
 			self.updateScreen()
-			
-			
-			try: # to update their version of the board, a bit unnecessary
-				player.board = self.board 
-			except AttributeError: pass
 			
 			# thread to let the AIs begin computations
 			player.think(self.board)
@@ -106,7 +101,7 @@ class Game:
 			if( i == 0 ): color = self.board.snake.headColor
 			else:
 				r, g, b = self.board.snake.color
-				factor = min(float( length - i) / length + 0.3, 1)
+				factor = (float(length - i) / length) * 0.7 + 0.3 # min 0.3, max 1, linear between
 				color = int(r  * factor), int(g * factor), int(b * factor)
 			(x, y) = self.board.snake.body[i]
 			self.drawRect(color, x, y)

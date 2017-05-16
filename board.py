@@ -6,9 +6,9 @@ import food
 class Board:
 	
 	#state constants
-	DEATH = -100
-	NORMAL = -10
-	SNACK = -1
+	DEATH = -999
+	NORMAL = 0
+	SNACK = 200
 	
 	#background
 	color = (50, 30, 10)
@@ -16,8 +16,8 @@ class Board:
 	def __init__(self):
 		
 		#dimensions
-		self.width = 20
-		self.height = 6
+		self.width = 7
+		self.height = 7
 		
 		#actors
 		self.snakeIsdead = False
