@@ -6,9 +6,9 @@ import food
 class Board:
 	
 	#state constants
-	DEATH = -999
+	DEATH = -100
 	NORMAL = 0
-	SNACK = 200
+	SNACK = 99
 	
 	#background
 	color = (50, 30, 10)
