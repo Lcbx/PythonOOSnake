@@ -11,7 +11,7 @@ seedInt = 12
 debug.say("seed : " + str(seedInt))
 random.seed(seedInt)
 
-
+DEPTH = 6
 WIDTH = 100
 
 class Node:
@@ -25,8 +25,8 @@ class Node:
 			value, board = self.board.potentialEndturn(decision)
 			child =  Node(value, board)
 			self.children[decision] = child
-			return (child, True) # a new Node was created
-		return (self.children[decision], False) # found an existing Node
+			return child # a new Node was created
+		return self.children[decision] # found an existing Node
 	
 	def getValue(self):
 		# mean of the children's value
@@ -45,12 +45,11 @@ class Node:
 		depth = 0
 		node = self
 		path = []
-		while True:
+		while depth < DEPTH:
 			depth += 1
 			possibility = random.choice(direction.ALL)
-			node, end = node._investigate(possibility)
+			node = node._investigate(possibility)
 			path.append(possibility)
-			if end : break
 		debug.say(" -> ".join(map(str, path)) + " : " + str(node.value))
 		return node
 
